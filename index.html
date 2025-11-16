@@ -6,35 +6,65 @@
 <meta name="theme-color" content="#faf7f1"/>
 <title>ЕВА и ЛИЛИТ — программа сопровождения</title>
 
-<!-- Google Fonts: Roboto Slab (тонкий/стандартный + италик) -->
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
 
-<!-- Iconify (онлайн-иконки) -->
+<!-- Iconify -->
 <script src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.1/dist/iconify-icon.min.js" defer></script>
 
 <style>
 :root{
-  --bg:#faf7f1;            /* фон */
-  --surface:#ffffff;       /* карты */
-  --ink:#2a2e34;           /* тёмный текст (не чёрный) */
-  --muted:#6a6f7c;         /* вторичный текст */
-  --icon:#c6cbd6;          /* светлый цвет иконок */
-  --gold:#CDAF61; --gold2:#EEDCA5;
-  --line:#e8e2d4;
-  --shadow:0 12px 26px rgba(0,0,0,.08);
+  /* Палитра / базовые */
+  --bg:#faf7f1; --surface:#ffffff; --ink:#2a2e34; --muted:#6a6f7c; --icon:#c6cbd6;
+  --gold:#CDAF61; --gold2:#EEDCA5; --line:#e8e2d4; --shadow:0 12px 26px rgba(0,0,0,.08);
   --grad:linear-gradient(135deg,#cdae60 0%,#e9d28e 55%,#fff3c8 100%);
-
   --container-w:94vw; --container-max:560px;
 
-  /* кнопки: одинаковая ширина, лёгкое скругление */
-  --btn-py:16px; --btn-px:20px; --btn-radius:10px;
+  /* Кнопки (общие) */
+  --btn-py:16px; --btn-px:14px; --btn-radius:14px;
+
+  /* HERO размеры / позиция CTA */
+  /* === МЕНЯЙ ЭТО ЧИСЛО, ЧТОБЫ ПОДНЯТЬ/ОПУСТИТЬ КНОПКУ "ХОЧУ НА КУРС" В HERO ===
+     Меньше значение  → кнопка выше
+     Больше значение  → кнопка ниже
+  */
+  --hero-cta-bottom:110px;
+
+  /***** HERO кадр + затемнение + золото *****/
+  --hero-zoom: 1.5;   /* < 1.45 → фото чуть дальше */
+  --hero-pos-x: 50%;
+  --hero-pos-y: 50%;   /* больше = опустить фото ниже, чтобы заголовок не заезжал на лицо */
+  --hero-origin-x: 40%;
+  --hero-origin-y: 50%;
+ 
+  /* Верхний тёмный градиент (за текстом) */
+  --hero-grad-top: .72;
+  --hero-grad-mid: .08;
+  --hero-grad-bottom: .30;
+  --hero-grad-top-stop: 15%;
+  --hero-grad-mid-stop: 30%;
+
+  /* Золотое напыление снизу → к центру */
+  --gold-glow-opacity: .80;    /* сила напыления */
+  --gold-glow-stop1: 0%;       /* старт у самого низа */
+  --gold-glow-stop2: 35%;      /* середина */
+  --gold-glow-stop3: 68%;      /* где затухает */
+
+  /* Заголовок — золотой текст */
+  --title-gold:linear-gradient(180deg,#fff4cc 0%, #eed38f 44%, #cfae61 100%);
+
+  /* Кнопка в HERO (компактнее) */
+  --btn-hero-py:10px; --btn-hero-px:18px; --btn-hero-font:16px; --btn-hero-minw:180px;
+
+  /* Аватар (блок «Автор») — дефолтные значения */
+  --avatar-zoom:1.25; --avatar-pos-x:70%; --avatar-pos-y:50%;
 }
 
 *{box-sizing:border-box}
 html,body{
   margin:0;background:var(--bg);color:var(--ink);
-  font:16px/1.55 "Roboto Slab", Georgia, serif;
+  font:16px/1.55 "Manrope", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
 }
 img{max-width:100%;display:block}
@@ -43,9 +73,9 @@ a{color:inherit;text-decoration:none}
 section{padding:18px 0;scroll-margin-top:64px}
 
 /* Типографика */
-.h1{font-weight:400;font-size:clamp(28px,7.6vw,40px);line-height:1.08;margin:0;text-align:center}
-.h2{font-weight:400;font-size:clamp(28px,7.6vw,42px);line-height:1.08;margin:0 0 12px;text-align:center}
-.lead{font-weight:300;font-size:15px;color:var(--muted);margin:0}
+.h1{font-weight:600;font-family:"Playfair Display", Georgia, serif;font-size:clamp(28px,7.6vw,40px);line-height:1.08;margin:0;text-align:center}
+.h2{font-weight:600;font-family:"Playfair Display", Georgia, serif;font-size:clamp(28px,7.6vw,42px);line-height:1.08;margin:0 0 12px;text-align:center}
+.lead{font-weight:400;font-size:15px;color:var(--muted);margin:0}
 
 /* Header */
 .header{position:sticky;top:0;z-index:60;background:rgba(250,247,241,.92);backdrop-filter:saturate(130%) blur(10px);border-bottom:1px solid rgba(205,175,97,.25)}
@@ -65,12 +95,12 @@ section{padding:18px 0;scroll-margin-top:64px}
 .drawer-head{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid rgba(0,0,0,.06)}
 .drawer a{padding:14px 16px;border-bottom:1px solid rgba(0,0,0,.04);font-weight:400}
 
-/* Кнопки — одинаковая ширина, лёгкое скругление */
+/* Кнопки */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:var(--btn-py) var(--btn-px);
   border-radius:var(--btn-radius);
-  font-weight:400;letter-spacing:.2px;border:0;cursor:pointer;transition:.18s transform, box-shadow .18s ease;
+  font-weight:600;letter-spacing:.2px;border:0;cursor:pointer;transition:.18s transform, box-shadow .18s ease;
   width:100%;
 }
 .btn--gold{background:var(--grad);color:#242a31;box-shadow:0 10px 28px rgba(205,175,97,.18), inset 0 1px 0 rgba(255,255,255,.6)}
@@ -78,121 +108,158 @@ section{padding:18px 0;scroll-margin-top:64px}
 .btn:active{transform:translateY(0)}
 .btn[aria-disabled="true"]{pointer-events:none;opacity:.6}
 
-/* HERO */
+/* ==== HERO (слои: фото → градиент → золото+пыль → текст) ==== */
 .hero{padding:0}
 .heroCard{
-  position:relative;border-radius:18px;overflow:hidden;box-shadow:0 18px 46px rgba(205,175,97,.18);
-  height:100svh;max-height:820px;min-height:560px
+  position:relative;border-radius:18px;overflow:hidden;
+  box-shadow:0 18px 46px rgba(205,175,97,.18);
+  height:var(--hero-h);max-height:var(--hero-max);min-height:var(--hero-min);
 }
-.heroCard img{width:100%;height:100%;object-fit:cover}
+
+/* 1) Фото */
+.heroCard img{
+  width:100%;height:100%;object-fit:cover;
+  object-position: var(--hero-pos-x) var(--hero-pos-y);
+  transform: scale(var(--hero-zoom));
+  transform-origin: var(--hero-origin-x) var(--hero-origin-y);
+  position:relative; z-index:1;
+}
+
+/* 2) ТЁМНЫЙ ГРАДИЕНТ (за текстом, без полос) */
+.heroCard::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:linear-gradient(
+    180deg,
+    rgba(0,0,0,var(--hero-grad-top)) var(--hero-grad-top-stop),
+    rgba(0,0,0,var(--hero-grad-mid)) var(--hero-grad-mid-stop),
+    rgba(0,0,0,var(--hero-grad-bottom)) 100%
+  );
+}
+
+/* 3) ЗОЛОТОЕ НАПЫЛЕНИЕ СНИЗУ + «пыль» (под текстом) */
+.heroCard::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
+  mix-blend-mode:screen;
+  opacity:1; /* управляем через состав фонов ниже */
+
+  /* Сначала — мягкий ЗОЛОТОЙ ГЛОУ снизу, затем — зерно «пыль» */
+  background:
+    /* ЗОЛОТОЕ НАПЫЛЕНИЕ: большая эллипс-растушёвка от низа к центру */
+    radial-gradient(120% 70% at 50% 100%,
+      rgba(238,211,143,var(--gold-glow-opacity)) var(--gold-glow-stop1),
+      rgba(238,211,143,.24) var(--gold-glow-stop2),
+      rgba(238,211,143,0) var(--gold-glow-stop3)
+    ),
+    /* ПЫЛЬ */
+    radial-gradient(3.8px 3.8px at 12% 24%, rgba(255,220,160,.75), transparent 60%),
+    radial-gradient(3.8px 3.8px at 28% 18%, rgba(255,230,170,.70), transparent 55%),
+    radial-gradient(3.8px 3.8px at 44% 36%, rgba(255,230,180,.65), transparent 60%),
+    radial-gradient(3.8px 3.8px at 66% 28%, rgba(255,220,150,.70), transparent 60%),
+    radial-gradient(3.8px 3.8px at 82% 44%, rgba(255,235,190,.60), transparent 60%),
+    radial-gradient(3.8px 3.8px at 20% 78%, rgba(250,215,140,.55), transparent 60%),
+    radial-gradient(3.8px 3.8px at 58% 72%, rgba(255,225,165,.55), transparent 60%),
+    radial-gradient(3.8px 3.8px at 84% 78%, rgba(255,235,195,.55), transparent 60%);
+  filter: blur(.2px);
+}
+
+/* 4) Текст поверх всего */
 .heroTop{
-  position:absolute;inset:0 0 auto 0;padding:16px 16px 18px;
-  background:linear-gradient(180deg,rgba(0,0,0,.90) 0%,rgba(0,0,0,.75) 60%,rgba(0,0,0,0) 100%);
-  color:#fff;text-align:center;display:grid;gap:10px;align-content:start;
-}
-.heroSub{
-  font-style:italic;font-weight:300;font-size:clamp(14px,3.6vw,16px);margin:0 auto;max-width:54ch;
-  display:inline-block;padding:8px 10px;border-radius:10px;
-  background:rgba(22,24,28,.28); /* лёгкая тёмная подсветка под текстом */
+  position:absolute;inset:0 0 auto 0;padding:18px 16px 22px;
+  text-align:center;z-index:4;background:none;
 }
 .heroBottom{
-  position:absolute;inset:auto 0 20px 0;padding:18px 16px 22px;
-  background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.30) 38%,rgba(0,0,0,.58) 100%);
-  color:#fff;text-align:center
+  position:absolute;inset:auto 0 var(--hero-cta-bottom) 0;
+  padding:0 16px;text-align:center;z-index:4;background:none;
 }
-.btn--hero{max-width:var(--container-max);margin:0 auto}
 
-/* ДЛЯ КОГО (иконки в кругляшах) */
+/* Кнопка в HERO — компактная */
+.btn--hero{
+  width:auto;min-width:var(--btn-hero-minw);max-width:var(--container-max);
+  margin:0 auto;border-radius:28px;
+  padding:var(--btn-hero-py) var(--btn-hero-px);
+  font-size:var(--btn-hero-font);
+}
+
+/* Для кого */
 .forWrap{display:grid;gap:12px}
 .forItem{display:grid;grid-template-columns:48px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
 .forItem:last-child{border-bottom:0}
 .ic{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);box-shadow:0 6px 14px rgba(0,0,0,.04)}
 .ic iconify-icon{font-size:26px;color:var(--icon)}
-.forTitle{font-weight:400;font-size:16px;margin-bottom:4px;color:var(--ink)}
-.forText{font-weight:300;font-size:15px;color:var(--muted)}
+.forTitle{font-weight:600;font-size:16px;margin-bottom:4px;color:var(--ink)}
+.forText{font-weight:400;font-size:15px;color:var(--muted)}
 
-/* Автор — круглый большой аватар */
+/* Автор — круглый аватар с управлением кадром */
 .author{text-align:center}
 .avatar{
-  width:340px;height:340px;border-radius:50%;background:#ddd center/cover no-repeat;
+  width:360px;height:360px;border-radius:50%;background:#ddd no-repeat;
+  background-image:var(--avatar-image, url('photo.jpg'));
+  background-size:calc(100% * var(--avatar-zoom));
+  background-position:var(--avatar-pos-x) var(--avatar-pos-y);
   border:4px solid var(--gold2);box-shadow:0 18px 36px rgba(205,175,97,.20);margin:14px auto 10px;
 }
 .authorText{list-style:none;margin:12px auto 0;padding:0;display:grid;gap:10px;max-width:560px;text-align:left}
 .authorText li{position:relative;padding-left:18px;font-size:18px;color:var(--muted)}
 .authorText li::before{content:"•";position:absolute;left:4px;color:var(--gold);font-weight:400}
 
-/* Модули — иконки крупнее, без обводок/цвета рамок, в круглых бейджах */
+/* Модули (аккордеоны) */
 .acc{border:1px solid rgba(205,175,97,.28);border-radius:14px;background:#fff;margin-bottom:12px;overflow:hidden}
-.accBtn{width:100%;text-align:left;background:transparent;border:0;padding:16px 16px;display:grid;grid-template-columns:56px 1fr 20px;gap:12px;align-items:center;cursor:pointer}
+.accBtn{width:100%;text-align:left;background:transparent;border:0;padding:16px;display:grid;grid-template-columns:56px 1fr 20px;gap:12px;align-items:center;cursor:pointer}
 .modBadge{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.05)}
 .modBadge iconify-icon{font-size:32px;color:var(--icon)}
-.accTitle{font-weight:400;font-size:18px;color:var(--ink);text-transform:uppercase}
-.accPlus{transition:transform .2s ease;font-weight:400;color:var(--ink)}
+.accTitle{font-weight:600;font-size:18px;color:var(--ink);text-transform:uppercase;font-family:"Cormorant Garamond","Playfair Display", Georgia, serif}
+.accPlus{transition:transform .2s ease;font-weight:600;color:var(--ink)}
 .acc[aria-expanded="true"] .accPlus{transform:rotate(45deg)}
 .accPanel{height:0;overflow:hidden;transition:height .3s ease}
-.accInner{padding:0 16px 16px 16px;color:var(--ink);font-weight:300;font-size:15px}
+.accInner{padding:0 16px 16px 16px;color:var(--ink);font-weight:400;font-size:15px}
 
-/* Результаты — иконки крупнее, в кругах, без подложек карточек */
+/* Результаты */
 .results{display:grid;gap:12px}
 .result{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
 .result:last-child{border-bottom:0}
 .result .badge{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.05)}
 .result iconify-icon{font-size:32px;color:var(--icon)}
-.result strong{font-weight:400;font-size:16px;color:var(--ink)}
-.result small{display:block;color:var(--muted);font-weight:300;font-size:15px}
+.result strong{font-weight:600;font-size:16px;color:var(--ink)}
+.result small{display:block;color:var(--muted);font-weight:400;font-size:15px}
 
 /* Тарифы */
 .card{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:14px;box-shadow:var(--shadow);padding:14px}
-.price{font-weight:400;font-size:30px;margin:8px 0 0;text-align:left;color:var(--ink)}
+.price{font-weight:700;font-size:30px;margin:8px 0 0;text-align:left;color:var(--ink);font-family:"Playfair Display", Georgia, serif}
 .bullets{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:8px}
 .bullets li{position:relative;padding-left:18px;font-size:15px}
-.bullets li::before{content:"•";position:absolute;left:4px;color:var(--gold);font-weight:400}
+.bullets li::before{content:"•";position:absolute;left:4px;color:var(--gold);font-weight:700}
 .gate{margin-top:10px;border-top:1px dashed rgba(0,0,0,.15);padding-top:10px}
 .agree{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#4a4131;margin:6px 0}
 
-/* Отзывы — круглые аватары */
+/* Отзывы (карусель) */
 .track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
 .slide{flex:0 0 88%;scroll-snap-align:center}
-.review{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow)}
+.review{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:var(--shadow)}
 .revAva{width:56px;height:56px;border-radius:50%;background:#ddd center/cover no-repeat;border:3px solid var(--gold2)}
-.revName{font-weight:400;color:var(--ink)}
-.revText{font-weight:300;font-size:14px;color:var(--muted)}
+.revName{font-weight:700;color:var(--ink);font-family:"Playfair Display", Georgia, serif}
+.revText{font-weight:400;font-size:14px;color:var(--muted);margin-top:4px;white-space:normal}
 
-/* Final CTA */
+/* Финальный CTA */
 #final{padding:32px 0 42px;text-align:center}
 
-/* Reveal (анимация появления блоков) */
+/* Reveal */
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease, transform .6s ease}
 .reveal.is-visible{opacity:1;transform:none}
-@media (prefers-reduced-motion: reduce){
-  .reveal{transition:none}
-}
-/* --- Видео-урок (лайт-плеер) --- */
-.videoWrap{display:grid;gap:12px}
-.videoCard{
-  position:relative; border-radius:14px; overflow:hidden;
-  box-shadow:var(--shadow); background:#000; aspect-ratio:16/9;
-  cursor:pointer; isolation:isolate;
-}
-.videoThumb{
-  position:absolute; inset:0;
-  background:#000 center/cover no-repeat;
-  filter:brightness(.82);
-  transition:filter .2s ease;
-}
-.videoCard:hover .videoThumb{filter:brightness(.9)}
-.videoPlay{
-  position:absolute; inset:auto; left:50%; top:50%; transform:translate(-50%,-50%);
-  width:72px; height:72px; border-radius:50%;
-  background:var(--grad); box-shadow:0 12px 28px rgba(205,175,97,.28), inset 0 1px 0 rgba(255,255,255,.6);
-  display:grid; place-items:center;
-}
-.videoPlay::before{
-  content:""; display:block; margin-left:4px; /* лёгкий сдвиг как у YouTube */
-  width:0; height:0; border-top:12px solid transparent; border-bottom:12px solid transparent; border-left:18px solid #242a31;
-}
-.videoHint{
-  text-align:center; font-weight:300; font-size:14px; color:var(--muted);
+@media (prefers-reduced-motion: reduce){.reveal{transition:none}}
+
+/* GOLD TITLE */
+.h1–gold{
+  position: relative;
+  z-index: 4;
+  color: transparent;
+  background: var(--title-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 2px 14px rgba(205,175,97,.45),
+    0 0 30px rgba(255,240,189,.35),
+    0 0 2px rgba(0,0,0,.15);
 }
 </style>
 </head>
@@ -234,32 +301,18 @@ section{padding:18px 0;scroll-margin-top:64px}
 <section class="hero" id="hero">
   <div class="container">
     <div class="heroCard reveal">
-      <img src="photo.jpg" alt="ЕВА и ЛИЛИТ — программа сопровождения" loading="lazy" decoding="async">
+      <img src="photo.JPG" alt="ЕВА И ЛИЛИТ — программа сопровождения" loading="lazy" decoding="async">
       <div class="heroTop">
-        <h1 class="h1">ПРОГРАММА СОПРОВОЖДЕНИЯ «ЕВА И ЛИЛИТ»</h1>
-        
+        <h1 class="h1 h1–gold">ПРОГРАММА СОПРОВОЖДЕНИЯ «ЕВА И ЛИЛИТ»</h1>
       </div>
       <div class="heroBottom">
+        <!-- КНОПКА HERO. ВЫСОТА РЕГУЛИРУЕТСЯ ПЕРЕМЕННОЙ --hero-cta-bottom В :root -->
         <a class="btn btn--gold btn--hero" href="#pricing">Хочу на курс</a>
       </div>
     </div>
   </div>
 </section>
-<!-- Видео-урок -->
-<section id="lesson">
-  <div class="container reveal">
-    <h2 class="h2">СМОТРИ УРОК ПРО СТРАТЕГИИ ПОВЕДЕНИЯ АРХЕТИПОВ В ЖЕНСКО-МУЖСКИХ ОТНОШЕНИЯХ 👇</h2>
-    <div class="videoWrap" style="margin-top:12px">
-      <!-- Лайт-плеер: загрузит iframe только по клику -->
-      <div class="videoCard" data-yt="UZuVFsccsUo" aria-label="Смотреть видео на YouTube" role="button">
-        <!-- Превью — берём стандартный постер YouTube -->
-        <div class="videoThumb" style="background-image:url('https://i.ytimg.com/vi/UZuVFsccsUo/hqdefault.jpg')"></div>
-        <div class="videoPlay" aria-hidden="true"></div>
-      </div>
-      <p class="videoHint">Нажми, чтобы запустить видео</p>
-    </div>
-  </div>
-</section>
+
 <!-- Для кого -->
 <section id="for">
   <div class="container reveal">
@@ -294,7 +347,22 @@ section{padding:18px 0;scroll-margin-top:64px}
 <section id="author">
   <div class="container author reveal">
     <h2 class="h2">Медина Абильвапова</h2>
-    <div class="avatar" style="background-image:url('photo.JPG')"></div>
+
+    <!-- АВАТАР АВТОРА
+         МЕНЯЙ ЗНАЧЕНИЯ:
+         --avatar-zoom   → приблизить / отдалить
+         --avatar-pos-x  → сдвиг влево/вправо (0% слева, 50% центр, 100% справа)
+         --avatar-pos-y  → сдвиг вверх/вниз (0% сверху, 50% центр, 100% снизу)
+    -->
+    <div class="avatar"
+      style="
+        --avatar-image:url('photo.jpg');
+        --avatar-zoom:1.5;
+        --avatar-pos-x:50%;
+        --avatar-pos-y:24%;
+      ">
+    </div>
+
     <ul class="authorText">
       <li>Дипломированный психолог (СПбГУП).</li>
       <li>Доход с блога от 500&nbsp;тыс.&nbsp;₽ в месяц.</li>
@@ -428,7 +496,7 @@ section{padding:18px 0;scroll-margin-top:64px}
     <h2 class="h2">Тарифы</h2>
 
     <div class="card" id="plan-standard">
-      <div style="font-weight:400;font-size:18px;text-align:left;color:var(--ink)">Стандарт</div>
+      <div style="font-weight:600;font-size:18px;text-align:left;color:var(--ink);font-family:'Playfair Display', Georgia, serif">Стандарт</div>
       <div class="price">99&nbsp;990&nbsp;₽</div>
       <ul class="bullets">
         <li>4 групповых созвона с Мединой</li>
@@ -440,7 +508,7 @@ section{padding:18px 0;scroll-margin-top:64px}
     </div>
 
     <div class="card" id="plan-premium" style="margin-top:12px">
-      <div style="font-weight:400;font-size:18px;text-align:left;color:var(--ink)">Премиум</div>
+      <div style="font-weight:600;font-size:18px;text-align:left;color:var(--ink);font-family:'Playfair Display', Georgia, serif">Премиум</div>
       <div class="price">199&nbsp;990&nbsp;₽</div>
       <ul class="bullets">
         <li>8 личных созвонов с Мединой</li>
@@ -451,7 +519,6 @@ section{padding:18px 0;scroll-margin-top:64px}
       <div style="margin-top:10px"><a class="btn btn--gold buy" data-pay="https://example.com/pay-premium" aria-disabled="true" href="#">Купить</a></div>
     </div>
 
-    <!-- чекбоксы-гейт -->
     <div class="card gate">
       <label class="agree"><input type="checkbox" id="agree1"> <span>Ознакомлена с программой и осознанно записываюсь.</span></label>
       <label class="agree"><input type="checkbox" id="agree2"> <span>Согласна с обработкой персональных данных и офертой/политикой возврата.</span></label>
@@ -464,25 +531,69 @@ section{padding:18px 0;scroll-margin-top:64px}
 <section id="reviews">
   <div class="container reveal">
     <h2 class="h2">Отзывы учениц</h2>
+
+    <!-- ВАЖНО:
+         rev1.jpg, rev2.jpg, rev3.jpg нужно положить рядом с index.html
+         Тогда аватарки автоматически подхватятся
+    -->
     <div class="track" data-carousel data-autoplay="5000">
+
+      <!-- Слайд 1 — Катя -->
       <div class="slide">
         <div class="review">
-          <div class="revAva" style="background-image:url('photo.JPG')"></div>
-          <div><div class="revName">Анна</div><div class="revText">За 2 месяца закрыла первый миллион, отношения спокойнее и щедрее.</div></div>
+          <div class="revAva" style="background-image:url('rev1.jpg')"></div>
+          <div>
+            <div class="revName">Катя</div>
+            <div class="revText">
+              <strong>РЕЗУЛЬТАТЫ доверительницы Кати</strong><br>
+              <strong>ТОЧКА А (до программы):</strong><br>
+              • Не могла найти, в какой нише реализоваться, доход около 200&nbsp;000&nbsp;₽.<br>
+              • Живет в некомфортных для неё условиях.<br>
+              • Не было подруг, которые поддерживали бы её в намерении реализоваться.<br>
+              • Проблемы с имиджем и самоподачей.<br>
+              • Мучается от лишнего веса и отёков.
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Слайд 2 — Катя (повтор кейса, можно позже заменить другим отзывом) -->
       <div class="slide">
         <div class="review">
-          <div class="revAva" style="background-image:url('photo.JPG')"></div>
-          <div><div class="revName">Мария</div><div class="revText">Перестала стесняться просить. Подарков — больше, чем ожидала.</div></div>
+          <div class="revAva" style="background-image:url('rev2.jpg')"></div>
+          <div>
+            <div class="revName">Катя</div>
+            <div class="revText">
+              <strong>ТОЧКА А (до программы):</strong><br>
+              • Не могла определиться с нишей и застревала в сомнениях, доход около 200&nbsp;000&nbsp;₽.<br>
+              • Жила в некомфортных для неё условиях — не чувствовала опоры.<br>
+              • Не было поддерживающего женского окружения, разделяющего её амбиции.<br>
+              • Имидж и самоподача не отражали внутренний потенциал.<br>
+              • Тяжесть в теле из-за лишнего веса и отёков.
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Слайд 3 — Катя (ещё раз структурированная Точка А) -->
       <div class="slide">
         <div class="review">
-          <div class="revAva" style="background-image:url('photo.JPG')"></div>
-          <div><div class="revName">Ева</div><div class="revText">Нашла команду, запустили продукт — пошли продажи.</div></div>
+          <div class="revAva" style="background-image:url('rev3.jpg')"></div>
+          <div>
+            <div class="revName">Катя</div>
+            <div class="revText">
+              <strong>Кейс доверительницы Кати</strong><br>
+              <strong>ТОЧКА А:</strong><br>
+              • Поисki себя: не понимала, в какой нише реализовываться, доход держался около 200&nbsp;000&nbsp;₽.<br>
+              • Быт и окружение вызывали внутренний дискомфорт.<br>
+              • Не было женского круга, который поддерживал бы в развитии.<br>
+              • Имидж, стиль и самоподача не вызывали нужного отклика у людей и мужчин.<br>
+              • Лишний вес и отёки, из-за которых не нравилось отражение в зеркале.
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -502,13 +613,13 @@ const drawerBack=document.getElementById('drawerBack');
 const closeDrawer=document.getElementById('closeDrawer');
 const drawer=drawerBack?.querySelector('.drawer');
 function lockScroll(lock){ document.documentElement.style.overflow = lock ? 'hidden' : ''; }
-function openDrawer(){ if(!drawerBack) return; drawerBack.style.display='block'; requestAnimationFrame(()=>{ drawer.style.transform='translateX(0)'; drawerBack.setAttribute('aria-hidden','false'); lockScroll(true);});}
-function hideDrawer(){ if(!drawerBack) return; drawer.style.transform='translateX(-100%)'; drawerBack.setAttribute('aria-hidden','true'); setTimeout(()=>{drawerBack.style.display='none'; lockScroll(false);},280);}
+function openDrawer(){ if(!drawerBack||!drawer) return; drawerBack.style.display='block'; requestAnimationFrame(()=>{ drawer.style.transform='translateX(0)'; drawerBack.setAttribute('aria-hidden','false'); lockScroll(true);});}
+function hideDrawer(){ if(!drawerBack||!drawer) return; drawer.style.transform='translateX(-100%)'; drawerBack.setAttribute('aria-hidden','true'); setTimeout(()=>{drawerBack.style.display='none'; lockScroll(false);},280);}
 burger?.addEventListener('click',openDrawer);
 closeDrawer?.addEventListener('click',hideDrawer);
 drawerBack?.addEventListener('click',e=>{ if(e.target===drawerBack) hideDrawer();});
 drawer?.querySelectorAll('[data-close]').forEach(a=>a.addEventListener('click',hideDrawer));
-addEventListener('keydown',e=>{ if(e.key==='Escape' && drawerBack && drawerBack.style.display==='block') hideDrawer();});
+addEventListener('keydown',e=>{ if(e.key==='Escape' && drawerBack?.style.display==='block') hideDrawer();});
 
 /* Аккордеоны */
 document.querySelectorAll('.acc').forEach(acc=>{
@@ -521,7 +632,7 @@ document.querySelectorAll('.acc').forEach(acc=>{
   addEventListener('resize',()=>{if(acc.getAttribute('aria-expanded')==='true'){panel.style.height=(inner.offsetHeight+8)+'px';}},{passive:true});
 });
 
-/* Автопрокрутка отзывов (минимально) */
+/* Автопрокрутка отзывов */
 document.querySelectorAll('[data-carousel]').forEach(track=>{
   const slides=[...track.children]; const delay=+track.dataset.autoplay||0;
   if(delay>0){let i=0,t; const play=()=>t=setInterval(()=>{i=(i+1)%slides.length; track.scrollTo({left:slides[i].offsetLeft-8,behavior:'smooth'});},delay);
@@ -530,7 +641,7 @@ document.querySelectorAll('[data-carousel]').forEach(track=>{
   track.addEventListener('mouseleave',()=>{stop();play();});}
 });
 
-/* Gate под тарифами: «сначала чекбоксы» */
+/* Gate под тарифами */
 const a1=document.getElementById('agree1'), a2=document.getElementById('agree2');
 const buys=[...document.querySelectorAll('.buy')];
 function gateOK(){return a1?.checked && a2?.checked;}
@@ -544,28 +655,11 @@ buys.forEach(btn=>btn.addEventListener('click',e=>{
   }
 }));
 
-/* Reveal — анимация появления секций */
+/* Reveal */
 const ioReveal=new IntersectionObserver((entries)=>entries.forEach(e=>{
   if(e.isIntersecting){ e.target.classList.add('is-visible'); ioReveal.unobserve(e.target); }
 }),{threshold:.2});
 document.querySelectorAll('.reveal').forEach(el=>ioReveal.observe(el));
-/* Лайт-плеер YouTube: подставляет iframe по клику */
-document.querySelectorAll('.videoCard[data-yt]').forEach(card=>{
-  card.addEventListener('click', ()=>{
-    const id = card.getAttribute('data-yt');
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
-    iframe.setAttribute('title','YouTube video player');
-    iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
-    iframe.setAttribute('allowfullscreen','');
-    iframe.style.position = 'absolute';
-    iframe.style.inset = '0';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    card.innerHTML = '';
-    card.appendChild(iframe);
-  }, {once:true});
-});
 </script>
 </body>
 </html>
