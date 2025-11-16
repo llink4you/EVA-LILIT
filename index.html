@@ -29,7 +29,7 @@
      Меньше значение  → кнопка выше
      Больше значение  → кнопка ниже
   */
-  --hero-cta-bottom:110px;
+  --hero-cta-bottom:150px;
 
   /***** HERO кадр + затемнение + золото *****/
   --hero-zoom: 1.5;   /* < 1.45 → фото чуть дальше */
@@ -57,9 +57,16 @@
   /* Кнопка в HERO (компактнее) */
   --btn-hero-py:10px; --btn-hero-px:18px; --btn-hero-font:16px; --btn-hero-minw:180px;
 
-  /* Аватар (блок «Автор») — дефолтные значения */
-  --avatar-zoom:1.25; --avatar-pos-x:70%; --avatar-pos-y:50%;
-}
+  /* Аватар (блок «Автор»)
+     МЕНЯЙ ЭТИ ПЕРЕМЕННЫЕ, ЧТОБЫ ДВИГАТЬ ФОТО В КРУЖКЕ:
+     --avatar-zoom  → приблизить / отдалить
+     --avatar-pos-x → влево / вправо (0% слева, 50% центр, 100% справа)
+     --avatar-pos-y → вверх / вниз (0% сверху, 50% центр, 100% снизу)
+  */
+  --avatar-image: url('photo.jpg');
+  --avatar-zoom: 1.5;
+  --avatar-pos-x: 60%;
+  --avatar-pos-y: 24%;
 
 *{box-sizing:border-box}
 html,body{
@@ -354,15 +361,7 @@ section{padding:18px 0;scroll-margin-top:64px}
          --avatar-pos-x  → сдвиг влево/вправо (0% слева, 50% центр, 100% справа)
          --avatar-pos-y  → сдвиг вверх/вниз (0% сверху, 50% центр, 100% снизу)
     -->
-    <div class="avatar"
-      style="
-        --avatar-image:url('photo.jpg');
-        --avatar-zoom:1.5;
-        --avatar-pos-x:50%;
-        --avatar-pos-y:24%;
-      ">
-    </div>
-
+ <div class="avatar"></div>
     <ul class="authorText">
       <li>Дипломированный психолог (СПбГУП).</li>
       <li>Доход с блога от 500&nbsp;тыс.&nbsp;₽ в месяц.</li>
